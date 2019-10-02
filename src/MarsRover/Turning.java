@@ -2,12 +2,11 @@ package MarsRover;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class Turning {
-
-
-    static final double conversionFactor = 57.2957795;
 
     public static void main(String[] args)
     {
@@ -15,68 +14,77 @@ public class Turning {
         Rover rover = new Rover();
         rover.setSteering(1.00, 30.00);
         System.out.println("OOP: " + round(rover.turningRadius, 2));
-        System.out.println(round(turningRad(1.00, 30.00), 2));
 
         rover.setSteering(1.00, 13.76);
         System.out.println("OOP: " + round(rover.turningRadius, 2));
-        System.out.println(round(turningRad(1.00, 13.76), 2));
 
         rover.setSteering(1.00, 2.34);
         System.out.println("OOP: " + round(rover.turningRadius, 2));
-        System.out.println(round(turningRad(1.00, 2.34), 2));
 
         rover.setSteering(1.00, 90.00);
         System.out.println("OOP: " + round(rover.turningRadius, 2));
-        System.out.println(round(turningRad(1.00, 90.00), 2));
 
         rover.setSteering(2.45, 90.00);
         System.out.println("OOP: " + round(rover.turningRadius, 2));
-        System.out.println(round(turningRad(2.45, 90.00), 2));
 
 
 
         //level 2
         rover.setSteering(1, 30);
         rover.drive(1);
-        double[] result = drive(1, 1, 30);
-        output(result);
         output(rover);
         rover.resetPosition();
 
         rover.setSteering(2.13, 23.00);
         rover.drive(4.30);
-        result = drive(2.13, 4.30, 23.00);
-        output(result);
         output(rover);
         rover.resetPosition();
 
         rover.setSteering(1.75, -23.00);
         rover.drive(3.14);
-        result = drive(1.75, 3.14, -23.00);
-        output(result);
         output(rover);
         rover.resetPosition();
 
         rover.setSteering(2.70, -34.00);
         rover.drive(45.00);
-        result = drive(2.70, 45.00, -34.00);
-        output(result);
         output(rover);
         rover.resetPosition();
 
         rover.setSteering(4.20, 20.00);
         rover.drive(-5.30);
-        result = drive(4.20, -5.30, 20.00);
-        output(result);
         output(rover);
         rover.resetPosition();
 
         rover.setSteering(9.53, 0);
         rover.drive(8.12);
-        result = drive(9.53, 8.12, 0);
-        output(result);
         output(rover);
         rover.resetPosition();
+
+
+        //level 3
+
+        ArrayList<Instruction> instructions = new ArrayList<>();
+        Instruction instruction = new Instruction(9.86, 10.0);
+        instructions.add(instruction);
+        instructions.add(instruction);
+        instructions.add(instruction);
+        instructions.add(instruction);
+
+        rover.drive(1.09, instructions);
+        output(rover);
+
+        rover.resetPosition();
+        instructions.clear();
+
+        instruction = new Instruction(5.00, 23.00);
+        instructions.add(instruction);
+        rover.drive(1.00, instructions);
+        output(rover);
+
+
+
+
+
     }
 
 
@@ -92,64 +100,24 @@ public class Turning {
     }
 
 
-    private static double turningRad(double wheelbase, double steeringAngle)
-    {
-        return Math.abs(wheelbase / Math.sin(steeringAngle / conversionFactor));
-    }
-
-    private static double[] drive(double wheelbase, double distance, double steeringAngle)
-    {
-        double deltaX;
-        double deltaY;
-        double newDirection;
-        if (steeringAngle != 0)
-        {
-            double radius = turningRad(wheelbase, steeringAngle);
-
-            double arcAngle = arcAngle(distance, radius);
-
-            if (arcAngle > 360) { arcAngle = arcAngle % 360; }
-            double halfArc = arcAngle / 2;
-
-            double deltaXY = 2 * radius * Math.sin(Math.toRadians(halfArc));
-
-            deltaY = radius * Math.sin(Math.toRadians(arcAngle));
-
-            double deltaXSquared = deltaXY*deltaXY - deltaY*deltaY;
-            deltaX = Math.sqrt(deltaXSquared);
-
-            if (steeringAngle < 0) deltaX = - deltaX;
-
-            newDirection = Math.toDegrees(Math.asin(deltaX/deltaXY)) * 2;
-
-            if (newDirection < 0) newDirection = 360 + newDirection;
-        }
-        else
-        {
-            deltaX = 0;
-            deltaY = distance;
-            newDirection = steeringAngle;
-        }
-
-        double[] result = { deltaX, deltaY, newDirection};
-        return result;
-
-
-
-    }
-
-    private static double arcAngle(double arcLength, double radius)
-    {
-        return Math.toDegrees(arcLength / radius);
-    }
-
-
     private static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 
         BigDecimal bd = new BigDecimal(Double.toString(value));
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
+    }
+}
+
+class Instruction
+{
+    double distance;
+    double steeringAngle;
+
+    public Instruction (double distance, double steeringAngle)
+    {
+        this.distance = distance;
+        this.steeringAngle = steeringAngle;
     }
 }
 
@@ -161,6 +129,7 @@ class Rover
     double wheelbase;
     double turningRadius;
     double direction = 0;
+    double unmodular = 0;
 
     private void setRad()
     {
@@ -172,6 +141,9 @@ class Rover
         x = 0;
         y = 0;
         direction = 0;
+        unmodular = 0;
+        steeringAngle = 0;
+        turningRadius = 0;
     }
 
     public void setSteering(double wheelbase, double steeringAngle)
@@ -179,6 +151,16 @@ class Rover
         this.wheelbase = wheelbase;
         this.steeringAngle = steeringAngle;
         setRad();
+    }
+
+    public void drive(double wheelbase, ArrayList<Instruction> instructions)
+    {
+        for (Instruction instruction : instructions)
+        {
+            setSteering(wheelbase, instruction.steeringAngle);
+            drive(instruction.distance);
+            output();
+        }
     }
 
     public void drive(double distance)
@@ -213,9 +195,42 @@ class Rover
             deltaY = distance;
             newDirection = steeringAngle;
         }
-        x += deltaX;
-        y += deltaY;
-        direction = newDirection;
+        setDirection(newDirection);
+        if (Math.floor(direction) <= 90 && direction > 0.1)
+        {
+            x += deltaX;
+            y += deltaY;
+        }
+        else if (Math.floor(direction) <= 180 && direction > 0.1)
+        {
+            x += deltaX;
+            y -= deltaY;
+        }
+        else if (Math.floor(direction) <= 270 && direction > 0.1)
+        {
+            x -= deltaX;
+            y -= deltaY;
+        }
+        else if (Math.floor(unmodular) <= 360)
+        {
+            x -= deltaX;
+            y += deltaY;
+        }
+    }
+
+    private void setDirection(double newDirection)
+    {
+        direction += newDirection;
+        if (direction > 360)
+        {
+            unmodular = direction;
+            direction = direction % 360;
+        }
+    }
+
+    private void output()
+    {
+        System.out.println(" x ="+ x + " y =  " + y + "  newDirection = " + direction);
     }
 
     private double arcAngle(double arcLength, double radius)
