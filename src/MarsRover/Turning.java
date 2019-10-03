@@ -195,37 +195,15 @@ class Rover
             deltaY = distance;
             newDirection = steeringAngle;
         }
+        x += deltaX;
+        y += deltaY;
         setDirection(newDirection);
-        if (Math.floor(direction) <= 90 && direction > 0.1)
-        {
-            x += deltaX;
-            y += deltaY;
-        }
-        else if (Math.floor(direction) <= 180 && direction > 0.1)
-        {
-            x += deltaX;
-            y -= deltaY;
-        }
-        else if (Math.floor(direction) <= 270 && direction > 0.1)
-        {
-            x -= deltaX;
-            y -= deltaY;
-        }
-        else if (Math.floor(unmodular) <= 360)
-        {
-            x -= deltaX;
-            y += deltaY;
-        }
     }
 
     private void setDirection(double newDirection)
     {
         direction += newDirection;
-        if (direction > 360)
-        {
-            unmodular = direction;
-            direction = direction % 360;
-        }
+        if (direction > 360) { direction = direction % 360; }
     }
 
     private void output()
