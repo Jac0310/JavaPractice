@@ -6,7 +6,7 @@ import java.util.Arrays;
 public class VendorProcessor extends AbstractProcessor {
     @Override
     public Object[] process(ArrayList<String[]> data, int level) {
-        Transaction[] result = new Transaction[data.size()];
+        Object[] result = new Object[data.size()];
         if (level == 1 || level == 2)
         {
             for (int n = 0; n < data.size(); n++)
@@ -16,13 +16,14 @@ public class VendorProcessor extends AbstractProcessor {
 
             }
         }
-        if (level == 3)
+        Grid g = null;
+        if (level == 3 || level == 4)
         {
             for (int n = 0; n < data.size(); n++)
             {
                 //build grid
                 String[] d = data.get(n);
-                Grid g = new Grid(d[0]);
+                g = new Grid(d[0]);
                 d = Arrays.copyOfRange(d, 1, d.length);
 
                 int noOfCells = g.numberOfCells();
@@ -34,16 +35,29 @@ public class VendorProcessor extends AbstractProcessor {
 
                 d = Arrays.copyOfRange(d, noOfCells, d.length);
 
-                int price = g.getPrice(d[0]);
+                if (level == 3)
+                {
+                    int price = g.getPrice(d[0]);
 
-                d[0] = price + "";
+                    d[0] = price + "";
 
-                Transaction t = readTransaction(d);
-                result[n] = t;
+                    Transaction t = readTransaction(d);
+                    result[n] = t;
+                }
+                if (level == 4)
+                {
+                    for (int i = 0; i < noOfCells; i++)
+                    {
+                        g.setStock(Integer.parseInt(d[i]));
+                    }
+                    d = Arrays.copyOfRange(d, noOfCells+1, d.length);
+
+                    Grid afterOrder = g.processOrder(d);
+                    Integer revenue = g.getRevenue(g, afterOrder);
+                    result[n] = revenue;
+                }
             }
         }
-
-
         return result;
     }
 

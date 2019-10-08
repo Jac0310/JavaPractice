@@ -10,10 +10,10 @@ public class VendorManager extends AbstractManager {
     {
         instance = new VendorManager();
         instance.init();
-     //   instance.runLevel(1);
-     //   instance.runLevel(2);
-        instance.runLevel(3);
-//        instance.runLevel(4);
+//        instance.runLevel(1);
+//        instance.runLevel(2);
+//        instance.runLevel(3);
+        instance.runLevel(4);
     }
     @Override
     public void init() {
@@ -47,5 +47,14 @@ public class VendorManager extends AbstractManager {
         levelThreeFiles.add("lvl-3-5-v");
 
         instance.files.put(3, levelThreeFiles);
+
+        ArrayList<String> levelFourFiles = new ArrayList<>();
+        levelFourFiles.add("lvl-4-0-v");
+        levelFourFiles.add("lvl-4-1-v");
+        levelFourFiles.add("lvl-4-2-v");
+        levelFourFiles.add("lvl-4-3-v");
+        levelFourFiles.add("lvl-4-4-v");
+
+        instance.files.put(4, levelFourFiles);
     }
 }

@@ -6,17 +6,23 @@ import java.util.Arrays;
 public class VenderOutput extends AbstractOutput {
     @Override
     public void output(Object[] data, int level) {
-        Transaction[] transactions = (Transaction[]) data;
+
         l = level + "";
 
         if (level == 1)
         {
+            Transaction[] transactions = (Transaction[]) data;
             outPutChange(transactions);
         }
-        if (level == 2)
+        if (level == 2 || level == 3)
         {
+            Transaction[] transactions = (Transaction[]) data;
             outPutCoins(transactions);
+        }
 
+        if (level == 4)
+        {
+            outPutRevenue(data);
         }
     }
 
@@ -69,5 +75,16 @@ public class VenderOutput extends AbstractOutput {
             }
         }
         return result;
+    }
+
+    private void outPutRevenue(Object[] revs)
+    {
+        ArrayList<String> result = new ArrayList<>();
+        for (Object i: revs
+             ) {
+            Integer n = (Integer) i;
+            result.add(n + "");
+        }
+        toFile(result);
     }
 }
