@@ -80,7 +80,18 @@ public class ImageTest extends TestCase {
         Shape s4 = yesImage4.getShape();
 
         assertTrue(s3.equals(s4));
+    }
 
+    @Test
+    public void test4()
+    {
+        Image yesImage4 = new Image(yes4, 100);
+        Image noImage4 = new Image(no4, 100);
+        Shape s4 = yesImage4.getShape();
+        Shape n4 = noImage4.getShape();
+        assertTrue(!s4.equals(n4));
+
+        assertTrue(s4.area == 4 );
     }
 
 }

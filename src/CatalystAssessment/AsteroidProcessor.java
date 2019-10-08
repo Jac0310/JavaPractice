@@ -3,9 +3,9 @@ package CatalystAssessment;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Processor {
+public class AsteroidProcessor extends AbstractProcessor {
 
-    public Image[] process1(ArrayList<int[]> data)
+    public Image[] process(ArrayList<int[]> data)
     {
         int startTimeStamp = data.get(0)[0];
         int endTimeStamp = data.get(0)[1];
@@ -26,7 +26,7 @@ public class Processor {
     }
 
 
-    public Image processImage(ArrayList<int[]> data)
+    private Image processImage(ArrayList<int[]> data)
     {
         int timestamp = data.get(0)[0];
         int rowcount = data.get(0)[1];

@@ -1,16 +1,15 @@
 package CatalystAssessment;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 
 public class Shape {
 
     public int area;
 
-    public HashSet<Line> lines = new HashSet<>();
+    public ArrayList<Integer> lines = new ArrayList<>();
 
-    int[][]binaryMap;
+    private int[][]bMap;
+    private int[][]inverseBMap;
 
 
 
@@ -18,11 +17,22 @@ public class Shape {
     public Shape(int area, int[][] binaryMap)
     {
         this.area = area;
-        this.binaryMap = binaryMap;
-        initialiseLines();
+        this.bMap = binaryMap;
+        inverseBMap = new int[bMap.length][bMap[0].length];
+
+
+        for (int i = 0; i < bMap.length; i++)
+        {
+            inverseBMap[i] = bMap[bMap.length-1-i];
+            inverseBMap[bMap.length-1-i] = bMap[i];
+        }
+
+
+        initialiseLines(bMap);
+        initialiseLines(inverseBMap);
     }
 
-    public void initialiseLines()
+    public void initialiseLines(int[][] binaryMap)
     {
         for (int r = 0; r < binaryMap.length; r++)
         {
@@ -39,7 +49,7 @@ public class Shape {
                             horizontal++;
                         }
                     } else { horizontal++; }
-                    if (horizontalLineEnd(r, c)) { lines.add(new Line(horizontal)); horizontal = 0; }
+                    if (horizontalLineEnd(r, c, binaryMap) && horizontal > 0) { lines.add(horizontal); horizontal = 0; }
                 }
             }
         }
@@ -52,20 +62,20 @@ public class Shape {
                 int pixel = binaryMap[r][c];
                 if (pixel == 1)
                 {
-                    if (c < 0)
+                    if (c > 0)
                     {
                         if (binaryMap[r][c-1]==0)
                         {
                             vertical++;
                         }
                     } else { vertical++; }
-                    if (verticalLineEnd(r, c)) { lines.add(new Line(vertical)); vertical = 0; }
+                    if (verticalLineEnd(r, c, binaryMap) && vertical > 0) { lines.add(vertical); vertical = 0; }
                 }
             }
         }
     }
 
-    public boolean horizontalLineEnd(int row, int column)
+    public boolean horizontalLineEnd(int row, int column, int[][] binaryMap)
     {
         if (column < binaryMap[0].length-1)
         {
@@ -79,7 +89,7 @@ public class Shape {
         return true;
     }
 
-    public boolean verticalLineEnd(int row, int column)
+    public boolean verticalLineEnd(int row, int column, int[][] binaryMap)
     {
         if (row < binaryMap.length-1)
         {
@@ -97,7 +107,8 @@ public class Shape {
     public boolean equals(Object s)
     {
         Shape other = (Shape) s;
-        return other.area == area && other.lines.equals(lines);
+
+        return other.area == area && lines.containsAll(other.lines) && other.lines.containsAll(lines);
     }
 
 

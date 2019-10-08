@@ -2,7 +2,6 @@ package CatalystAssessment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.stream.Stream;
 
 public class Image {
@@ -12,15 +11,23 @@ public class Image {
     public int rowCount;
     public int timestamp;
 
+    private Shape shape;
+
     public Image(int[][] ary, int timestamp)
     {
         this.array = ary;
         columnCount = array[0].length;
         rowCount = array.length;
         this.timestamp = timestamp;
+        initShape();
     }
 
     public Shape getShape()
+    {
+        return shape;
+    }
+
+    private void initShape()
     {
         ArrayList<int[]> result = new ArrayList<>();
 
@@ -34,11 +41,9 @@ public class Image {
 
             binaryArray = Arrays.stream(array).map(n -> Arrays.stream(n).map(x -> x > 0 ? 1 : 0).toArray()).toArray(int[][]::new);
 
-
-          //  int columns = Arrays.stream(array).filter(n -> Arrays.stream(n).filter(x -> x != 0).toArray().length > 0).to
         }
-        int area = result.stream().mapToInt(a -> Arrays.stream(a).sum()).sum();
-        return new Shape(area, binaryArray);
+        int area = Arrays.stream(binaryArray).mapToInt(a -> Arrays.stream(a).sum()).sum();
+        shape = new Shape(area, binaryArray);
     }
 
 
