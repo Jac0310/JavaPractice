@@ -10,11 +10,11 @@ import java.util.Arrays;
 public class Reader {
 
 
-    public ArrayList<int[]> read(String fileName)
+    public ArrayList<String[]> read(String fileName)
     {
         String line;
         String result = null;
-        ArrayList<int[]> rows = new ArrayList<>();
+        ArrayList<String[]> rows = new ArrayList<>();
 
         fileName = "src/CatalystAssessment/" + fileName;
 
@@ -28,7 +28,7 @@ public class Reader {
             while((line = bufferedReader.readLine()) != null) {
                 // System.out.println(line);
                 result = line;
-                int[] row = Arrays.stream(result.split(" ")).mapToInt(s -> Integer.parseInt(s)).toArray();
+                String[] row = Arrays.stream(result.split(" ")).toArray(String[]::new);
                 rows.add(row);
             }
 
@@ -48,12 +48,5 @@ public class Reader {
             // ex.printStackTrace();
         }
         return rows;
-
-//        int[][] data = new int[rows.size()][rows.get(0).length];
-//        for (int i = 0; i < rows.size(); i++)
-//        {
-//            data[i] = rows.get(i);
-//        }
-//        return data;
     }
 }

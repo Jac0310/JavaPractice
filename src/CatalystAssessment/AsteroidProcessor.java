@@ -5,11 +5,12 @@ import java.util.Arrays;
 
 public class AsteroidProcessor extends AbstractProcessor {
 
-    public Image[] process(ArrayList<int[]> data)
+    public Image[] process(ArrayList<String[]> data, int level)
     {
-        int startTimeStamp = data.get(0)[0];
-        int endTimeStamp = data.get(0)[1];
-        int imageCount = data.get(0)[2];
+
+        int startTimeStamp = Integer.parseInt(data.get(0)[0]);
+        int endTimeStamp = Integer.parseInt(data.get(0)[1]);
+        int imageCount = Integer.parseInt(data.get(0)[2]);
         data.remove(0);
         Image[] images = new Image[imageCount];
 
@@ -26,18 +27,18 @@ public class AsteroidProcessor extends AbstractProcessor {
     }
 
 
-    private Image processImage(ArrayList<int[]> data)
+    private Image processImage(ArrayList<String[]> data)
     {
-        int timestamp = data.get(0)[0];
-        int rowcount = data.get(0)[1];
-        int colcount = data.get(0)[2];
+        int timestamp = Integer.parseInt(data.get(0)[0]);
+        int rowcount = Integer.parseInt(data.get(0)[1]);
+        int colcount = Integer.parseInt(data.get(0)[2]);
         data.remove(0);
         int[][] ary = new int[rowcount][colcount];
         for (int r = 0; r < rowcount; r++)
         {
             for (int c = 0; c < colcount; c++)
             {
-                ary[r][c] = data.get(r)[c];
+                ary[r][c] = Integer.parseInt(data.get(r)[c]);
             }
         }
         return new Image(ary, timestamp);

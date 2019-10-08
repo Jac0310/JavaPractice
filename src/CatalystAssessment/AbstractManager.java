@@ -25,8 +25,8 @@ public abstract class AbstractManager {
     public void readProcessOutput(String filename, int level)
     {
         Reader reader = new Reader();
-        ArrayList<int[]> data = reader.read(filename);
-        Object[] things = processor.process(data);
+        ArrayList<String[]> data = reader.read(filename);
+        Object[] things = processor.process(data, level);
         output.output(things, level);
     }
 }

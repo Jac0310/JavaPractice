@@ -25,7 +25,7 @@ public class Transaction {
     {
         change = getOutstanding();
         int[] changeMap = new int[8];
-        for (int i = 0; i < Coin.possibleCoins.length; i++)
+        for (int i = Coin.possibleCoins.length-1; i >= 0; i--)
         {
             changeMap = populateFrequency(Coin.possibleCoins[i].value, changeMap, i);
         }
@@ -34,7 +34,7 @@ public class Transaction {
 
     private int[] populateFrequency(int coinValue, int[] map, int index)
     {
-        while (change > coinValue)
+        while (change >= coinValue)
         {
             map[index] += 1;
             change -= coinValue;

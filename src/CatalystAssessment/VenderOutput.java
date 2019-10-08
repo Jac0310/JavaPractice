@@ -1,6 +1,7 @@
 package CatalystAssessment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class VenderOutput extends AbstractOutput {
     @Override
@@ -58,7 +59,15 @@ public class VenderOutput extends AbstractOutput {
     {
         String result = "";
         if (i < 0) {result += "MISSING " + Math.abs(i);}
-        if (i >= 0) {result += "CHANGE " + t.giveChange();}
+        if (i >= 0)
+        {
+            result += "CHANGE";
+            int[] change = t.giveChange();
+            for (int n = 0; n < change.length; n++)
+            {
+                result += " " + change[n];
+            }
+        }
         return result;
     }
 }
