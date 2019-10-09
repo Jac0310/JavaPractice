@@ -30,14 +30,24 @@ public class ImageTest extends TestCase {
             {1, 1, 1, 0},
             {0, 1, 0, 0}};
 
+    int[][] yes5 = {
+            {0, 0, 0, 0},
+            {1, 1, 1, 0},
+            {0, 1, 1, 0},
+            {0, 1, 0, 0}};
+
+    int[][] yes6 = {
+            {0, 0, 0, 0},
+            {1, 1, 0, 0},
+            {1, 1, 1, 0},
+            {1, 0, 0, 0}};
+
     int[][] no4 = {
             {0, 0, 0, 0},
             {1, 1, 1, 0},
             {0, 0, 1, 0}};
 
     int[][] no2 = {{1, 0, 0}, {0, 0, 1}, {0, 0, 0}};
-
-
 
 
     @Test
@@ -92,6 +102,16 @@ public class ImageTest extends TestCase {
         assertTrue(!s4.equals(n4));
 
         assertTrue(s4.area == 4 );
+    }
+
+    @Test
+    public void test5()
+    {
+        Image yesImage5 = new Image(yes5, 100);
+        Image yesImage6 = new Image(yes6, 100);
+        Shape s5 = yesImage5.getShape();
+        Shape s6 = yesImage6.getShape();
+        assertTrue(s5.equals(s6));
     }
 
 }
